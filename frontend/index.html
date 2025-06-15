@@ -10,7 +10,25 @@
     <div class="container">
         <h1>Clarity</h1>
         <p>Upload your video to remove captions.</p>
-        <input type="file" id="videoFile" accept="video/*">
+
+        <div class="upload-options">
+            <label for="videoFile">Choose video file:</label>
+            <input type="file" id="videoFile" accept="video/*">
+        </div>
+
+        <div class="removal-type-options">
+            <p>Select caption type to remove:</p>
+            <input type="radio" id="typeSoft" name="removal_type" value="soft" checked>
+            <label for="typeSoft">Soft Subtitles (Fast, for embedded captions)</label><br>
+            <input type="radio" id="typeHard" name="removal_type" value="hard">
+            <label for="typeHard">Hardcoded Captions (Slower, GPU recommended)</label><br>
+        </div>
+
+        <div id="emailSection" style="display: none; margin-bottom: 1em; text-align: left;">
+            <label for="userEmail" style="display: block; margin-bottom: 0.25em;">Email for notification (optional, for hardcoded captions):</label>
+            <input type="email" id="userEmail" name="user_email" placeholder="your.email@example.com" style="width: 95%; padding: 0.3em;">
+        </div>
+
         <button id="uploadButton">Upload and Process</button>
         <p id="statusMessage"></p>
         <!-- Download link will be dynamically added here by script.js -->

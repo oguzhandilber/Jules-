@@ -1,3 +1,7 @@
-rq>=1.10 # For task queue
-redis>=4.0 # For Redis connection
-# ffmpeg is a system dependency, not a Python package.
+PyYAML
+numpy
+omegaconf
+opencv-python
+redis>=4.0
+rq>=1.10
+scikit-image

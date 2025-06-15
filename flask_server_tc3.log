@@ -1,0 +1,15 @@
+[2025-06-15 15:38:27,911] ERROR in app: Redis connection error: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+[2025-06-15 15:38:27,914] INFO in app: Clarity Startup (Non-Debug)
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.2:5000
+Press CTRL+C to quit
+ * Restarting with stat
+[2025-06-15 15:38:28,223] ERROR in app: Redis connection error: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+[2025-06-15 15:38:28,228] INFO in app: Clarity Startup (Non-Debug)
+ * Debugger is active!
+ * Debugger PIN: 844-906-040
+127.0.0.1 - - [15/Jun/2025 15:38:35] "GET /download/processed_no_delete_yet.mp4 HTTP/1.1" 200 -

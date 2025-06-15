@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    # ports: # Not strictly needed if only accessed via Nginx proxy
+      # - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./processed_videos:/app/processed_videos
+      - ./file_metadata.json:/app/file_metadata.json
+      # For development, uncomment to mount source code for live reloading:
+      # - ./backend:/app/backend
+      # - ./worker:/app/worker
+    environment:
+      - FLASK_ENV=development # Flask will be in debug mode
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      # PYTHONUNBUFFERED is set in Dockerfile
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    volumes:
+      - ./uploads:/app/uploads
+      - ./processed_videos:/app/processed_videos
+      - ./file_metadata.json:/app/file_metadata.json
+      # For development:
+      # - ./worker:/app/worker
+      # - ./backend:/app/backend
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      # PYTHONUNBUFFERED is set in Dockerfile
+    depends_on:
+      - redis
+      # - backend # Not strictly necessary for worker to depend on backend service start
+    restart: unless-stopped
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379" # Expose Redis for direct inspection if needed during dev
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:

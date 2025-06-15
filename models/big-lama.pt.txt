@@ -1,0 +1,4 @@
+This is a placeholder for the LaMa inpainting model checkpoint (e.g., big-lama.pt).
+Download the pre-trained model from the official LaMa repository or a trusted source.
+(e.g., from https://github.com/saic-mdal/lama often linked in their README)
+Place the .pt or .ckpt file here.

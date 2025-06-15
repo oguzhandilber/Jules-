@@ -1,0 +1,4 @@
+This is a placeholder for the EAST text detection model.
+Download 'frozen_east_text_detection.pb' and place it here.
+It can typically be found online, often associated with OpenCV EAST text detection tutorials.
+Example source: https://github.com/oyyd/frozen_east_text_detection.pb/raw/master/frozen_east_text_detection.pb (Check license and suitability)

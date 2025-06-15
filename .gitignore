@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+*.venv
+env/
+venv/
+
+# Uploads and processed files
+uploads/
+processed_videos/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# File metadata store
+file_metadata.json

@@ -1,0 +1,3 @@
+This is a placeholder for the LaMa model configuration file (if used by the chosen implementation).
+Some LaMa implementations use a YAML configuration file alongside the model checkpoint.
+If your chosen LaMa code needs it, place it here.

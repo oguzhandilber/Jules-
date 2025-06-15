@@ -1,0 +1,13 @@
+--- Direct test of hardcoded_caption_remover.py ---
+Generating dummy input: ffmpeg -y -f lavfi -i color=c=blue:s=320x240:d=2 -vf drawtext=text='Test Caption':x=10:y=H-th-10:fontcolor=white:fontsize=24 -t 2 /app/worker/test_data_hardcoded/uploads/sample_hardcoded_test.mp4
+Dummy input created: /app/worker/test_data_hardcoded/uploads/sample_hardcoded_test.mp4
+Starting hardcoded caption removal for: /app/worker/test_data_hardcoded/uploads/sample_hardcoded_test.mp4
+Placeholder: Attempting to load EAST model from models/frozen_east_text_detection.pb
+Placeholder: Attempting to load LaMa model from models/lama_config.yaml & models/big-lama.pt
+No audio stream or error during extraction.
+Processed 50 frames to /app/worker/test_data_hardcoded/processed_videos/temp_video_no_audio_4587563c-3a66-492c-a38d-63bebaf71e5c.mp4
+Running ffmpeg for final output: ffmpeg -i /app/worker/test_data_hardcoded/processed_videos/temp_video_no_audio_4587563c-3a66-492c-a38d-63bebaf71e5c.mp4 -c:v copy -an -y /app/worker/test_data_hardcoded/processed_videos/sample_hardcoded_test_processed.mp4
+Cleaned original input: /app/worker/test_data_hardcoded/uploads/sample_hardcoded_test.mp4
+Direct test SUCCEEDED. Msg: Successfully processed (hardcoded captions - placeholder): /app/worker/test_data_hardcoded/processed_videos/sample_hardcoded_test_processed.mp4
+Output at: /app/worker/test_data_hardcoded/processed_videos/sample_hardcoded_test_processed.mp4
+--- Direct test finished ---

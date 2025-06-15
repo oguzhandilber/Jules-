@@ -1,0 +1,51 @@
+[2025-06-15 15:36:31,042] ERROR in app: Redis connection error: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+[2025-06-15 15:36:31,045] INFO in app: Clarity Startup (Non-Debug)
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.2:5000
+Press CTRL+C to quit
+ * Restarting with stat
+[2025-06-15 15:36:31,332] ERROR in app: Redis connection error: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+[2025-06-15 15:36:31,335] INFO in app: Clarity Startup (Non-Debug)
+ * Debugger is active!
+ * Debugger PIN: 844-906-040
+[2025-06-15 15:36:38,724] ERROR in app: Upload error (hard): Error 111 connecting to 127.0.0.1:6379. Connection refused.
+Traceback (most recent call last):
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/retry.py", line 87, in call_with_retry
+    return do()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 797, in _connect
+    raise err
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 781, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/backend/app.py", line 42, in upload_file_route
+    job=tq.enqueue(job_fn_path,args=(ifp,ofp),job_timeout='3h' if rt=='hard' else '1h',meta=m)
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1011, in enqueue
+    return self.enqueue_call(
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 743, in enqueue_call
+    return self.enqueue_job(job, pipeline=pipeline, at_front=at_front)
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1139, in enqueue_job
+    pipe.execute()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/client.py", line 1607, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/utils.py", line 191, in wrapper
+    return func(*args, **kwargs)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 1530, in get_connection
+    connection.connect()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+127.0.0.1 - - [15/Jun/2025 15:36:38] "POST /upload HTTP/1.1" 503 -

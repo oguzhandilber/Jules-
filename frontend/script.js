@@ -2,26 +2,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoFileInput = document.getElementById('videoFile');
     const uploadButton = document.getElementById('uploadButton');
     const statusMessage = document.getElementById('statusMessage');
-    // const downloadLink = document.getElementById('downloadLink'); // This was a typo in prompt, not used.
+    const emailSection = document.getElementById('emailSection');
+    const userEmailInput = document.getElementById('userEmail');
+    const removalTypeRadios = document.querySelectorAll('input[name="removal_type"]');
 
-    // Create download link element if it doesn't exist, and hide it.
     let dlAnchor = document.getElementById('downloadLinkAnchor');
     if (!dlAnchor) {
         dlAnchor = document.createElement('a');
         dlAnchor.id = 'downloadLinkAnchor';
-        dlAnchor.style.display = 'none'; // Hide it initially
+        dlAnchor.style.display = 'none';
         dlAnchor.textContent = 'Download Processed Video';
-        // Insert it after the status message or button
-        // Ensure statusMessage exists before trying to insert.
-        if (statusMessage) {
-            statusMessage.parentNode.insertBefore(dlAnchor, statusMessage.nextSibling);
-        } else if (uploadButton) { // Fallback to insert after upload button
-            uploadButton.parentNode.insertBefore(dlAnchor, uploadButton.nextSibling);
-        } else { // Fallback to append to body if critical elements are missing (should not happen in valid HTML)
-            document.body.appendChild(dlAnchor);
+        if (statusMessage && statusMessage.parentNode) {
+             statusMessage.parentNode.insertBefore(dlAnchor, statusMessage.nextSibling);
+        } else if (uploadButton && uploadButton.parentNode) { // Fallback
+             uploadButton.parentNode.insertBefore(dlAnchor, uploadButton.nextSibling);
         }
     }
 
+    function toggleEmailSection() {
+        const selectedType = document.querySelector('input[name="removal_type"]:checked').value;
+        if (selectedType === 'hard') {
+            emailSection.style.display = 'block';
+        } else {
+            emailSection.style.display = 'none';
+        }
+    }
+    removalTypeRadios.forEach(radio => radio.addEventListener('change', toggleEmailSection));
+    toggleEmailSection(); // Initial check on page load
 
     uploadButton.addEventListener('click', async () => {
         const file = videoFileInput.files[0];
@@ -30,19 +37,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const removalType = document.querySelector('input[name="removal_type"]:checked').value;
+        const userEmail = userEmailInput.value;
+
         statusMessage.textContent = 'Uploading...';
+        if (removalType === 'hard') {
+            statusMessage.textContent = 'Uploading... (Hardcoded caption removal may take a very long time)';
+        }
+
         uploadButton.disabled = true;
-        dlAnchor.style.display = 'none'; // Hide download link
+        dlAnchor.style.display = 'none';
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('removal_type', removalType);
+        if (removalType === 'hard' && userEmail && userEmail.trim() !== '') { // Send email only if provided
+            formData.append('user_email', userEmail.trim());
+        }
 
         try {
             const uploadResponse = await fetch('/upload', {
                 method: 'POST',
                 body: formData,
             });
-
             const uploadResult = await uploadResponse.json();
 
             if (!uploadResponse.ok) {
@@ -52,14 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (uploadResult.job_id) {
-                statusMessage.textContent = 'File queued for processing. Checking status...';
+                let queueMsg = removalType === 'hard' ? ' (long process)' : '';
+                statusMessage.textContent = `File queued for processing${queueMsg}. Job ID: ${uploadResult.job_id}. Checking status...`;
                 pollJobStatus(uploadResult.job_id);
             } else {
-                // This case should ideally not happen if uploadResponse.ok is true and job_id is expected
-                statusMessage.textContent = 'Upload successful, but no Job ID received. Cannot track processing.';
+                statusMessage.textContent = 'Upload successful, but no Job ID received.';
                 uploadButton.disabled = false;
             }
-
         } catch (error) {
             statusMessage.textContent = `Upload request error: ${error.message}`;
             uploadButton.disabled = false;
@@ -69,59 +85,61 @@ document.addEventListener('DOMContentLoaded', () => {
     async function pollJobStatus(jobId) {
         try {
             const statusResponse = await fetch(`/status/${jobId}`);
-            // Check for non-JSON responses first if server might return HTML error pages
             if (!statusResponse.headers.get("content-type") || !statusResponse.headers.get("content-type").includes("application/json")) {
-                statusMessage.textContent = `Error fetching status: Server returned non-JSON response (${statusResponse.status} ${statusResponse.statusText})`;
-                // Potentially stop polling or retry differently
-                setTimeout(() => pollJobStatus(jobId), 10000); // Longer delay for server errors
+                statusMessage.textContent = `Error fetching status: Server returned non-JSON (${statusResponse.status} ${statusResponse.statusText})`;
+                setTimeout(() => pollJobStatus(jobId), 10000);
                 return;
             }
-
             const statusResult = await statusResponse.json();
 
             if (!statusResponse.ok) {
-                statusMessage.textContent = `Error fetching status: ${statusResult.error || statusResponse.statusText || 'Unknown server error'}`;
+                statusMessage.textContent = `Error fetching status for ${jobId}: ${statusResult.error || statusResponse.statusText || 'Unknown server error'}`;
                 if (statusResponse.status === 404) {
                     uploadButton.disabled = false;
-                    return; // Stop polling if job not found
+                    return;
                 }
                 setTimeout(() => pollJobStatus(jobId), 5000);
                 return;
             }
 
             let currentStatus = statusResult.status;
-            statusMessage.textContent = `Processing status: ${currentStatus}`;
+            let jobMeta = statusResult.meta || {}; // Ensure meta exists
+            let removalTypeInfo = jobMeta.removal_type || (statusResult.queue_name && statusResult.queue_name.includes('hard') ? 'hard' : 'soft');
+
+            statusMessage.textContent = `Job ${jobId} (${removalTypeInfo}) Status: ${currentStatus}`;
+            if (currentStatus === 'queued' && removalTypeInfo === 'hard') {
+                 statusMessage.textContent += ` (This may take many minutes to hours. If you provided an email, you'll be notified upon completion.)`;
+            } else if (currentStatus === 'started' && removalTypeInfo === 'hard') {
+                 statusMessage.textContent += ` (Processing in progress...)`;
+            }
+
 
             if (currentStatus === 'finished') {
                 if (statusResult.result && statusResult.result.success) {
-                    statusMessage.textContent = 'Processing complete!';
-
-                    let processedFileName = statusResult.result.processed_file_name; // Expecting this from backend in M2
-
-                    if (processedFileName) {
-                        dlAnchor.href = `/download/${processedFileName}`;
+                    statusMessage.textContent = `Job ${jobId} (${removalTypeInfo}) processing complete!`;
+                    let processedFileName = statusResult.result.processed_file_name;
+                    let downloadUrl = statusResult.result.download_url; // Expecting this from backend
+                    if (processedFileName && downloadUrl) {
+                        dlAnchor.href = downloadUrl;
                         dlAnchor.download = processedFileName;
                         dlAnchor.style.display = 'block';
                         statusMessage.textContent += ` Ready for download.`;
                     } else {
-                        statusMessage.textContent = 'Processing complete, but could not determine download file name from response.';
-                         // Log the problematic part of the response for debugging
-                        console.error("Missing processed_file_name in statusResult.result:", statusResult.result);
+                        statusMessage.textContent = `Job ${jobId} (${removalTypeInfo}) complete, but download information is missing.`;
                     }
                 } else { // Job finished but was not successful
-                    statusMessage.textContent = `Processing failed: ${statusResult.result ? statusResult.result.message_or_path : (statusResult.error_message || 'Unknown error')}`;
+                    statusMessage.textContent = `Job ${jobId} (${removalTypeInfo}) processing failed: ${statusResult.result ? (statusResult.result.message || statusResult.result.message_or_path) : (statusResult.error_message || 'Unknown error')}`;
                 }
                 uploadButton.disabled = false;
             } else if (currentStatus === 'failed') {
-                statusMessage.textContent = `Processing failed: ${statusResult.error_message || 'Unknown error from job failure'}`;
+                statusMessage.textContent = `Job ${jobId} (${removalTypeInfo}) processing failed: ${statusResult.error_message || 'Unknown error from job failure'}`;
                 uploadButton.disabled = false;
-            } else { // Still processing
+            } else { // e.g. queued, started, deferred
                 setTimeout(() => pollJobStatus(jobId), 3000);
             }
-
         } catch (error) {
-            statusMessage.textContent = `Error polling status: ${error.message}`;
-            setTimeout(() => pollJobStatus(jobId), 5000); // Retry on network or unexpected errors
+            statusMessage.textContent = `Error polling status for ${jobId}: ${error.message}`;
+            setTimeout(() => pollJobStatus(jobId), 5000);
         }
     }
 });

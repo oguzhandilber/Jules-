@@ -1,0 +1,4 @@
+2025-06-15T15:38:37.744832Z - Starting cleanup process...
+Job ID job_tc3_download_policy: Deleting processed /app/processed_videos/processed_download_policy.mp4 (>1h since first download).
+Job ID job_tc3_upload_policy: Deleting processed /app/processed_videos/processed_upload_policy.mp4 (>24h since upload).
+Cleanup process finished. Total records: 3, marked deleted: 2.

@@ -1,0 +1,121 @@
+2025-06-15 15:27:32,033 INFO: Clarity Application Starting Up (Non-Debug Mode) [in /app/backend/app.py:193]
+2025-06-15 15:27:32,376 INFO: Clarity Application Starting Up (Non-Debug Mode) [in /app/backend/app.py:193]
+2025-06-15 15:28:54,812 INFO: Clarity Application Starting Up (Non-Debug Mode) [in /app/backend/app.py:176]
+2025-06-15 15:28:55,104 INFO: Clarity Application Starting Up (Non-Debug Mode) [in /app/backend/app.py:176]
+2025-06-15 15:29:02,580 INFO: Upload rejected: File type not allowed for filename 'test_video_for_curl.txt'. [in /app/backend/app.py:96]
+2025-06-15 15:30:51,096 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:149]
+2025-06-15 15:30:51,382 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:149]
+2025-06-15 15:30:58,864 ERROR: Upload error (soft): Error 111 connecting to 127.0.0.1:6379. Connection refused. [in /app/backend/app.py:90]
+Traceback (most recent call last):
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/retry.py", line 87, in call_with_retry
+    return do()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 797, in _connect
+    raise err
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 781, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/backend/app.py", line 82, in upload_file_route
+    job = target_queue.enqueue(
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1011, in enqueue
+    return self.enqueue_call(
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 743, in enqueue_call
+    return self.enqueue_job(job, pipeline=pipeline, at_front=at_front)
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1139, in enqueue_job
+    pipe.execute()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/client.py", line 1607, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/utils.py", line 191, in wrapper
+    return func(*args, **kwargs)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 1530, in get_connection
+    connection.connect()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+2025-06-15 15:33:06,458 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:154]
+2025-06-15 15:33:06,798 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:154]
+2025-06-15 15:33:14,227 ERROR: Upload error (soft): Error 111 connecting to 127.0.0.1:6379. Connection refused. [in /app/backend/app.py:94]
+Traceback (most recent call last):
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/retry.py", line 87, in call_with_retry
+    return do()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 797, in _connect
+    raise err
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 781, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/backend/app.py", line 86, in upload_file_route
+    job = target_queue.enqueue(
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1011, in enqueue
+    return self.enqueue_call(
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 743, in enqueue_call
+    return self.enqueue_job(job, pipeline=pipeline, at_front=at_front)
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1139, in enqueue_job
+    pipe.execute()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/client.py", line 1607, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/utils.py", line 191, in wrapper
+    return func(*args, **kwargs)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 1530, in get_connection
+    connection.connect()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+2025-06-15 15:36:31,045 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:104]
+2025-06-15 15:36:31,335 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:104]
+2025-06-15 15:36:38,724 ERROR: Upload error (hard): Error 111 connecting to 127.0.0.1:6379. Connection refused. [in /app/backend/app.py:46]
+Traceback (most recent call last):
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/retry.py", line 87, in call_with_retry
+    return do()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 797, in _connect
+    raise err
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 781, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/backend/app.py", line 42, in upload_file_route
+    job=tq.enqueue(job_fn_path,args=(ifp,ofp),job_timeout='3h' if rt=='hard' else '1h',meta=m)
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1011, in enqueue
+    return self.enqueue_call(
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 743, in enqueue_call
+    return self.enqueue_job(job, pipeline=pipeline, at_front=at_front)
+  File "/home/swebot/.local/lib/python3.10/site-packages/rq/queue.py", line 1139, in enqueue_job
+    pipe.execute()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/client.py", line 1607, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/utils.py", line 191, in wrapper
+    return func(*args, **kwargs)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 1530, in get_connection
+    connection.connect()
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+  File "/home/swebot/.local/lib/python3.10/site-packages/redis/connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:6379. Connection refused.
+2025-06-15 15:38:27,914 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:101]
+2025-06-15 15:38:28,228 INFO: Clarity Startup (Non-Debug) [in /app/backend/app.py:101]

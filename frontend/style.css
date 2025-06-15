@@ -1,0 +1,84 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+    line-height: 1.6; /* Added for better readability */
+}
+
+.container {
+    background-color: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+input[type="file"] {
+    margin-bottom: 1em;
+}
+
+button {
+    padding: 0.5em 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#statusMessage {
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+/* Footer styling from privacy.html for consistency if needed */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Styles for upload and removal type options */
+.upload-options, .removal-type-options {
+    margin-bottom: 1.5em; /* Increased margin */
+    padding: 1em; /* Increased padding */
+    border: 1px solid #ddd; /* Slightly darker border */
+    border-radius: 4px;
+    text-align: left;
+    background-color: #f9f9f9; /* Slight background tint */
+}
+
+.removal-type-options p {
+    margin-top: 0;
+    margin-bottom: 0.5em; /* Added margin below paragraph */
+    font-weight: bold;
+    color: #333; /* Darker text for heading */
+}
+
+.removal-type-options input[type="radio"] {
+    margin-right: 0.5em;
+    vertical-align: middle; /* Align radio with label text */
+}
+
+.removal-type-options label {
+    margin-right: 1em;
+    vertical-align: middle; /* Align label text */
+    font-size: 0.95em; /* Slightly smaller font for options */
+    color: #555; /* Slightly lighter text for options */
+}
+
+/* Ensure line breaks work as expected for radio options */
+.removal-type-options br {
+    margin-bottom: 0.5em; /* Space after <br> if used, though flex/grid might be better */
+}
